@@ -174,23 +174,88 @@ function draw(gl, obj)
 function createSquare(gl) 
 {
     var square = {};
+    var vertexBuffer;
+    var verts = [];
+    
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    verts = [
+        0.5, 0.5, 0.0,
+        -0.5, 0.5, 0.0,
+        0.5, -0.5, 0.0,
+        -0.5, -0.5, 0.0
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+    square = {buffer:vertexBuffer, vertSize:3, nVerts:4, primtype:gl.TRIANGLE_STRIP};
+
     return square;
 }
 
 function createTriangle(gl)
 {
     var triangle = {};
+    var vertexBuffer;
+    var verts = [];
+
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    verts = [
+        0.0, 0.5, 0.0,
+        .5, -.5,  0.0,
+        -.5, -.5,  0.0,
+    ];
+    
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+    triangle = {buffer:vertexBuffer, vertSize:3, nVerts:3, primtype:gl.TRIANGLES};
+
     return triangle;
 }
 
 function createRhombus(gl)
 {
     var rhombus = {};
+    var vertexBuffer;
+    var verts = [];
+
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+    
+    verts = [
+        0.0, 0.5, 0.0,
+        -0.5, 0.0, 0.0,
+        0.5, 0.0, 0.0,
+        0.0, -0.5, 0.0,
+    ];
+    
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+    rhombus = {buffer:vertexBuffer, vertSize:3, nVerts:4, primtype:gl.TRIANGLE_STRIP};
+
     return rhombus;
 }
 
 function createSphere(gl, radius)
 {
     var sphere = {};
+    var vertexBuffer;
+    var verts = [];
+
+    vertexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+
+    verts = [0.0, 0.0, 0.0]; // Add origin
+    //console.log(verts);
+
+    // Create a circle from 40° to 320°
+    for(i=40; i<=320; i++){
+        x = radius * Math.cos(i * Math.PI / 180); // X coord
+        y = radius * Math.sin(i * Math.PI / 180); // Y coord
+        //console.log(x, y);
+        verts.push(x, y, 0); // Add vertex
+        //console.log(verts[i],"\n");
+    }
+    //console.log(verts[3])
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(verts), gl.STATIC_DRAW);
+    sphere = {buffer:vertexBuffer, vertSize:3, nVerts:verts.length/3, primtype:gl.TRIANGLE_FAN};
+
     return sphere;
 }        
